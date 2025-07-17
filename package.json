@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "teleparty-websocket-lib": "github:watchparty-org/teleparty-WebSocket-lib"
   },
   "homepage": "https://<HemanthReddyGaddam>.github.io/teleparty-chat-app",
   "devDependencies": {
