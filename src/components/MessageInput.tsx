@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useSocket } from '../contexts/SocketContext';
-import { SocketMessageTypes } from 'teleparty-websocket-lib';
+import type { SessionChatMessage } from 'teleparty-websocket-lib';
 
 export const MessageInput: React.FC = () => {
-  const { sendMessage, setTyping, isConnected } = useSocket();
+  const { sendMessage, setTyping, isConnected, currentNickname } = useSocket();
   const [message, setMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [showMemberCount, setShowMemberCount] = useState(false);
 
   useEffect(() => {
     const typingTimeout = setTimeout(() => {
@@ -36,6 +37,9 @@ export const MessageInput: React.FC = () => {
 
   return (
     <div className="message-input">
+      <div className="member-count" onClick={() => setShowMemberCount(!showMemberCount)}>
+        👥 1 member{showMemberCount && ` (You are ${currentNickname || 'Unnamed'})`}
+      </div>
       <input
         type="text"
         placeholder="Type a message..."

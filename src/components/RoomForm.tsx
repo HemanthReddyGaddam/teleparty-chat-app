@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useSocket } from '../contexts/SocketContext';
+import { useNavigate } from 'react-router-dom'; // Assuming React Router for navigation
 
 export const RoomForm: React.FC = () => {
   const { isConnected, createChatRoom, joinChatRoom } = useSocket();
+  const navigate = useNavigate();
   const [nickname, setNickname] = useState('');
   const [roomId, setRoomId] = useState('');
   const [icon, setIcon] = useState<string | null>(null);
@@ -20,7 +22,9 @@ export const RoomForm: React.FC = () => {
     }
   };
 
-  const handleCreateRoom = async () => {
+// ... (previous imports and code)
+
+const handleCreateRoom = async () => {
     if (!nickname) {
       setError('Nickname is required');
       return;
@@ -28,12 +32,16 @@ export const RoomForm: React.FC = () => {
     try {
       const newRoomId = await createChatRoom(nickname, icon || undefined);
       setRoomId(newRoomId);
+      // Set current nickname in context or state (e.g., via useContext with a setter)
+      navigate(`/chatroom/${newRoomId}`);
       setError('');
     } catch (err) {
       setError('Failed to create room');
       console.error(err);
     }
   };
+  
+  // ... (rest of the code)
 
   const handleJoinRoom = async () => {
     if (!nickname || !roomId) {
@@ -42,6 +50,7 @@ export const RoomForm: React.FC = () => {
     }
     try {
       await joinChatRoom(roomId, nickname, icon || undefined);
+      navigate(`/chatroom/${roomId}`);
       setError('');
     } catch (err) {
       setError('Failed to join room');
@@ -51,11 +60,11 @@ export const RoomForm: React.FC = () => {
 
   return (
     <div className="room-form">
-      <h2>Join or Create a Chat Room</h2>
+      <h2>Welcome to Teleparty Chat</h2>
       {!isConnected && <p>Connecting to server...</p>}
       <input
         type="text"
-        placeholder="Enter your nickname"
+        placeholder="Choose your nickname"
         value={nickname}
         onChange={(e) => setNickname(e.target.value)}
         disabled={!isConnected}
@@ -71,7 +80,7 @@ export const RoomForm: React.FC = () => {
       </button>
       <input
         type="text"
-        placeholder="Enter room ID"
+        placeholder="Enter room ID to join"
         value={roomId}
         onChange={(e) => setRoomId(e.target.value)}
         disabled={!isConnected}
