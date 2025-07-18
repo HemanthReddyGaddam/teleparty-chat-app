@@ -2,6 +2,7 @@ import { SocketProvider } from './contexts/SocketContext';
 import { RoomForm } from './components/RoomForm';
 import { ChatWindow } from './components/ChatWindow';
 import { MessageInput } from './components/MessageInput';
+import { MembersSection } from './components/MembersSection'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
 
@@ -13,10 +14,13 @@ function App() {
           <Routes>
             <Route path="/" element={<RoomForm />} />
             <Route path="/chatroom/:roomId" element={
-              <>
-                <ChatWindow />
-                <MessageInput />
-              </>
+              <div className="main-layout">
+                <div className="chat-section">
+                  <ChatWindow />
+                  <MessageInput />
+                </div>
+                <MembersSection />
+              </div>
             } />
           </Routes>
         </div>

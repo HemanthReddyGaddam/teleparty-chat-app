@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSocket } from '../contexts/SocketContext';
-import type { SessionChatMessage } from 'teleparty-websocket-lib';
+
 
 export const MessageInput: React.FC = () => {
   const { sendMessage, setTyping, isConnected, currentNickname } = useSocket();

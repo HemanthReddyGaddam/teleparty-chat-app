@@ -1,7 +1,7 @@
 import { useSocket } from '../contexts/SocketContext';
 import { useParams } from 'react-router-dom';
 import type { SessionChatMessage } from 'teleparty-websocket-lib';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 export const ChatWindow: React.FC = () => {
   const { messages, anyoneTyping, currentNickname } = useSocket();
@@ -26,7 +26,7 @@ export const ChatWindow: React.FC = () => {
     <div className="chat-window">
       <h3>Chat Room: {roomId}</h3>
       <div className="messages">
-        {messages.map((msg: SessionChatMessage, index) => (
+        {messages.map((msg: SessionChatMessage) => (
           <div
             key={msg.permId }
             className={`message-container ${msg.isSystemMessage ? 'system-message' : ''}`}

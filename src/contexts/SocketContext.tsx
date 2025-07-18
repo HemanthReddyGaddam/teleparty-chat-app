@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext,useState } from 'react';
 import { TelepartyClient, SocketMessageTypes } from 'teleparty-websocket-lib';
 import type { SocketEventHandler, SessionChatMessage, MessageList } from 'teleparty-websocket-lib';
 import type { TypingMessageData } from '../types';
@@ -44,6 +44,10 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         } else if (message.type === SocketMessageTypes.SET_TYPING_PRESENCE) {
           const typingData = message.data as TypingMessageData;
           setAnyoneTyping(typingData.anyoneTyping);
+        } else if (message.type === 'messageList') {
+          // Load all previous messages when joining a session
+          const messageList = message.data as MessageList;
+          setMessages(messageList.messages);
         }
       }
     };
@@ -56,12 +60,14 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const createChatRoom = async (nickname: string, icon?: string): Promise<string> => {
     if (!isConnected) throw new Error('Socket not connected');
+    setCurrentNickname(nickname);
     const roomId = await client.createChatRoom(nickname, icon);
     return roomId;
   };
 
   const joinChatRoom = async (roomId: string, nickname: string, icon?: string): Promise<void> => {
     if (!isConnected) throw new Error('Socket not connected');
+    setCurrentNickname(nickname);
     await client.joinChatRoom(nickname, roomId, icon);
   };
 
